@@ -5,10 +5,16 @@ local config = {
   -- Default configuration
   command = "npx https://github.com/google-gemini/gemini-cli",
   terminal = {
+    enabled = true, -- Use floating terminal by default
     position = "bottom",
     height = 15,
     width = 120,
     border = "rounded",
+  },
+  chat_box = {
+    enabled = false, -- Use chat box by default
+    position = "right", -- "right" or "left"
+    width = 60,
   },
   prompts = {
     default = "",
@@ -41,22 +47,52 @@ end
 
 function M.run(command)
   local cmd = config.command .. " " .. command
-  local buf = vim.api.nvim_create_buf(false, true)
-  local win = vim.api.nvim_open_win(buf, true, {
-    relative = "editor",
-    width = config.terminal.width,
-    height = config.terminal.height,
-    col = (vim.o.columns - config.terminal.width) / 2,
-    row = (vim.o.lines - config.terminal.height) / 2,
-    style = "minimal",
-    border = config.terminal.border,
-  })
 
-  vim.fn.termopen(cmd, {
-    on_exit = function()
-      vim.api.nvim_win_close(win, true)
-    end,
-  })
+  if config.terminal.enabled then
+    local buf = vim.api.nvim_create_buf(false, true)
+    local win = vim.api.nvim_open_win(buf, true, {
+      relative = "editor",
+      width = config.terminal.width,
+      height = config.terminal.height,
+      col = (vim.o.columns - config.terminal.width) / 2,
+      row = (vim.o.lines - config.terminal.height) / 2,
+      style = "minimal",
+      border = config.terminal.border,
+    })
+
+    vim.fn.termopen(cmd, {
+      on_exit = function()
+        vim.api.nvim_win_close(win, true)
+      end,
+    })
+  elseif config.chat_box.enabled then
+    local output = vim.fn.systemlist(cmd)
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_option(buf, "buftype", "nofile")
+    vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
+    vim.api.nvim_buf_set_option(buf, "swapfile", false)
+    vim.api.nvim_buf_set_option(buf, "readonly", true)
+    vim.api.nvim_buf_set_option(buf, "modifiable", false)
+    vim.api.nvim_buf_set_option(buf, "filetype", "markdown") -- or a more appropriate filetype
+
+    local win_id
+    if config.chat_box.position == "right" then
+      vim.cmd("vsplit")
+      vim.cmd(config.chat_box.width .. "wincmd |")
+      win_id = vim.api.nvim_get_current_win()
+    elseif config.chat_box.position == "left" then
+      vim.cmd("vsplit")
+      vim.cmd("wincmd h")
+      vim.cmd(config.chat_box.width .. "wincmd |")
+      win_id = vim.api.nvim_get_current_win()
+    end
+
+    vim.api.nvim_win_set_buf(win_id, buf)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, output)
+    vim.api.nvim_win_set_cursor(win_id, {1, 0}) -- Move cursor to top of chat box
+  else
+    print("Error: Neither terminal nor chat_box is enabled in configuration.")
+  end
 end
 
 function M.prompt(opts)
@@ -74,7 +110,7 @@ end
 
 function M.info(opts)
   M.run("info")
-end
+}
 
 function M.prompt_with_system_prompt(opts)
   local selection = get_visual_selection()
@@ -87,3 +123,4 @@ function M.toggle_verbose(opts)
 end
 
 return M
+
