@@ -1,0 +1,16 @@
+
+# See https://github.com/github/gitignore/blob/main/Lua.gitignore
+
+# Environments
+.luarocks/
+
+# Lua interpreter
+luac.out
+
+# Build files
+.lake/
+lake-lock.ini
+
+# Coverage
+luacov.stats.out
+luacov.report.out
