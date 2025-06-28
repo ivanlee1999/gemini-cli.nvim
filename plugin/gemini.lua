@@ -31,42 +31,6 @@ end, {
   desc = "Toggle Gemini terminal (legacy command)",
 })
 
-vim.api.nvim_create_user_command("GeminiS", function(opts)
-  gemini.shell(opts)
-end, {
-  nargs = "*",
-  range = true,
-  desc = "Toggle Gemini terminal for shell commands (legacy)",
-})
 
-vim.api.nvim_create_user_command("GeminiI", function(opts)
-  gemini.info(opts)
-end, {
-  nargs = 0,
-  desc = "Toggle Gemini terminal for info (legacy)",
-})
-
-vim.api.nvim_create_user_command("GeminiP", function(opts)
-  gemini.prompt_with_system_prompt(opts)
-end, {
-  nargs = "*",
-  range = true,
-  desc = "Toggle Gemini terminal with system prompt (legacy)",
-})
-
-vim.api.nvim_create_user_command("GeminiT", function(opts)
-  gemini.toggle_verbose(opts)
-end, {
-  nargs = 0,
-  desc = "Toggle Gemini terminal with verbose output",
-})
-
-vim.api.nvim_create_user_command("GeminiChat", function()
-  gemini.start_chat()
-end, {
-  nargs = 0,
-  desc = "Start Gemini chat mode (legacy - now opens terminal)",
-})
-
--- Note: The new modular commands (GeminiCode, etc.) are registered 
+-- Note: The new modular commands (GeminiCode, etc.) are registered
 -- automatically by the gemini-code module when setup() is called
