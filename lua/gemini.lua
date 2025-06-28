@@ -90,6 +90,9 @@ function M.run(command)
     vim.api.nvim_buf_set_option(buf, "swapfile", false)
     vim.api.nvim_buf_set_option(buf, "readonly", true)
     vim.api.nvim_buf_set_option(buf, "modifiable", false)
+
+    -- Temporarily make buffer modifiable to write content
+    vim.api.nvim_buf_set_option(buf, "modifiable", true)
     vim.api.nvim_buf_set_option(buf, "filetype", "markdown") -- or a more appropriate filetype
 
     local win_id
@@ -106,6 +109,8 @@ function M.run(command)
 
     vim.api.nvim_win_set_buf(win_id, buf)
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, output)
+    vim.api.nvim_buf_set_option(buf, "modifiable", false)
+    vim.api.nvim_buf_set_option(buf, "readonly", true)
     vim.api.nvim_win_set_cursor(win_id, {1, 0}) -- Move cursor to top of chat box
   else
     print("Error: Neither terminal nor chat_box is enabled in configuration.")
