@@ -23,6 +23,15 @@ local config = {
 
 function M.setup(args)
   config = vim.tbl_deep_extend("force", config, args or {})
+
+  -- Ensure only one display mode is enabled
+  if config.chat_box.enabled and config.terminal.enabled then
+    config.terminal.enabled = false
+    print("Warning: Both chat_box and terminal are enabled. Prioritizing chat_box.")
+  elseif not config.chat_box.enabled and not config.terminal.enabled then
+    config.terminal.enabled = true -- Default to terminal if neither is enabled
+    print("Warning: Neither chat_box nor terminal is enabled. Defaulting to terminal.")
+  end
 end
 
 local function get_visual_selection()
