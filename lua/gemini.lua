@@ -121,7 +121,7 @@ function M.prompt(opts)
   local selection = get_visual_selection()
   local input = type(opts.args) == "table" and table.concat(opts.args, " ") or ""
   local prompt = get_prompt_for_filetype()
-  M.run("prompt " .. prompt .. " " .. input .. " " .. selection)
+  M.run("--prompt \"" .. prompt .. "\" " .. input .. " " .. selection)
 end
 
 function M.shell(opts)
