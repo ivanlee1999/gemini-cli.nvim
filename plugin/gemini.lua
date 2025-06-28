@@ -22,14 +22,7 @@ end
 local gemini = require("gemini")
 gemini.setup()
 
--- Legacy commands for backward compatibility
-vim.api.nvim_create_user_command("Gemini", function(opts)
-  gemini.prompt(opts)
-end, {
-  nargs = "*",
-  range = true,
-  desc = "Toggle Gemini terminal (legacy command)",
-})
+
 
 
 -- Note: The new modular commands (GeminiCode, etc.) are registered

@@ -26,11 +26,9 @@ Using your favorite plugin manager:
 ## Usage
 
 ### Interactive Chat Mode
-- `:Gemini` (without arguments): Start an interactive chat session in a floating window
 - `:GeminiChat`: Start an interactive chat session
 
 ### One-shot Commands
-- `:Gemini <prompt>`: Ask Gemini a question (one-time)
 - `:GeminiS <prompt>`: Ask Gemini a shell command
 - `:GeminiI`: Get info from Gemini
 - `:GeminiP <prompt>`: Ask Gemini a question with a system prompt
