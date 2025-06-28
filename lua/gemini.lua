@@ -19,7 +19,7 @@ function M.setup(args)
     command = args.command or "gemini",
     window = {
       split_ratio = 0.3,
-      position = "botright",
+      position = "botright vsplit",
       enter_insert = true,
       hide_numbers = true,
       hide_signcolumn = true,

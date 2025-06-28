@@ -12,7 +12,7 @@ M.default_config = {
   -- Terminal window settings
   window = {
     split_ratio = 0.3,       -- Percentage of screen for the terminal window
-    position = "botright",   -- Position of the window
+    position = "botright vsplit",   -- Position of the window (right side by default)
     enter_insert = true,     -- Whether to enter insert mode when opening Gemini
     hide_numbers = true,     -- Hide line numbers in the terminal window
     hide_signcolumn = true,  -- Hide the sign column in the terminal window
