@@ -282,11 +282,11 @@ local function send_message()
   -- Clear input buffer
   vim.api.nvim_buf_set_lines(chat_state.input_buf, 0, -1, false, {""})
   
-  -- Get response from Gemini
-  local cmd = config.command .. ' "' .. message:gsub('"', '\\"') .. '"'
-  
   -- Show loading message
   add_message_to_chat("gemini", "🤔 Thinking...")
+  
+  -- Use echo to pipe the message to gemini CLI (which expects stdin input)
+  local cmd = 'echo "' .. message:gsub('"', '\\"') .. '" | ' .. config.command .. ' --prompt ""'
   
   -- Run command asynchronously
   vim.fn.jobstart(cmd, {
