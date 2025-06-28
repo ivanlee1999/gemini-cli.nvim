@@ -3,6 +3,7 @@ local M = {}
 
 local config = {
   -- Default configuration
+  command = "npx https://github.com/google-gemini/gemini-cli",
   terminal = {
     position = "bottom",
     height = 15,
@@ -39,7 +40,7 @@ local function get_prompt_for_filetype()
 end
 
 function M.run(command)
-  local cmd = "npx https://github.com/google-gemini/gemini-cli " .. command
+  local cmd = config.command .. " " .. command
   local buf = vim.api.nvim_create_buf(false, true)
   local win = vim.api.nvim_open_win(buf, true, {
     relative = "editor",
