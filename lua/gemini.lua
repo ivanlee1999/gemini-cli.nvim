@@ -9,6 +9,9 @@ local config = {
     width = 120,
     border = "rounded",
   },
+  prompts = {
+    default = "",
+  },
 }
 
 function M.setup(args)
@@ -28,6 +31,11 @@ local function get_visual_selection()
   lines[#lines] = string.sub(lines[#lines], 1, ecol)
   lines[1] = string.sub(lines[1], scol)
   return table.concat(lines, "\n")
+end
+
+local function get_prompt_for_filetype()
+  local filetype = vim.bo.filetype
+  return config.prompts[filetype] or config.prompts.default
 end
 
 function M.run(command)
@@ -53,7 +61,8 @@ end
 function M.prompt(opts)
   local selection = get_visual_selection()
   local input = table.concat(opts.args, " ")
-  M.run("prompt " .. input .. " " .. selection)
+  local prompt = get_prompt_for_filetype()
+  M.run("prompt " .. prompt .. " " .. input .. " " .. selection)
 end
 
 function M.shell(opts)
@@ -64,7 +73,7 @@ end
 
 function M.info(opts)
   M.run("info")
-}
+end
 
 function M.prompt_with_system_prompt(opts)
   local selection = get_visual_selection()
