@@ -13,9 +13,10 @@ local config = {
   },
   chat_box = {
     enabled = true, -- Use chat box by default
-    position = "right", -- "right" or "left"
-    width = 60,
-    height = 30,
+    position = "right", -- "right" or "left" 
+    width = 30, -- Width as percentage of screen (30% by default)
+    use_float = false, -- Use sidebar instead of floating window
+    border = "rounded", -- Border style for floating mode
   },
   prompts = {
     default = "",
@@ -167,40 +168,79 @@ local function create_chat_window()
   vim.api.nvim_buf_set_option(chat_state.input_buf, "bufhidden", "wipe")
   vim.api.nvim_buf_set_option(chat_state.input_buf, "swapfile", false)
 
-  -- Calculate window dimensions
-  local width = math.floor(vim.o.columns * 0.8)
-  local height = math.floor(vim.o.lines * 0.8)
-  local chat_height = math.floor(height * 0.85)
-  local input_height = height - chat_height - 1
+  -- Check if we should use floating windows or sidebar
+  if config.chat_box.use_float then
+    -- Floating window mode (original implementation)
+    local width = math.floor(vim.o.columns * 0.8)
+    local height = math.floor(vim.o.lines * 0.8)
+    local chat_height = math.floor(height * 0.85)
+    local input_height = height - chat_height - 1
 
-  local col = math.floor((vim.o.columns - width) / 2)
-  local row = math.floor((vim.o.lines - height) / 2)
+    local col = math.floor((vim.o.columns - width) / 2)
+    local row = math.floor((vim.o.lines - height) / 2)
 
-  -- Create chat window (main conversation area)
-  chat_state.win = vim.api.nvim_open_win(chat_state.buf, true, {
-    relative = "editor",
-    width = width,
-    height = chat_height,
-    col = col,
-    row = row,
-    style = "minimal",
-    border = "rounded",
-    title = " Gemini Chat ",
-    title_pos = "center",
-  })
+    -- Create chat window (main conversation area)
+    chat_state.win = vim.api.nvim_open_win(chat_state.buf, true, {
+      relative = "editor",
+      width = width,
+      height = chat_height,
+      col = col,
+      row = row,
+      style = "minimal",
+      border = config.chat_box.border,
+      title = " Gemini Chat ",
+      title_pos = "center",
+    })
 
-  -- Create input window (user input area)
-  chat_state.input_win = vim.api.nvim_open_win(chat_state.input_buf, false, {
-    relative = "editor",
-    width = width,
-    height = input_height,
-    col = col,
-    row = row + chat_height + 1,
-    style = "minimal",
-    border = "rounded",
-    title = " Your Message (Press Enter to send, Ctrl+C to exit) ",
-    title_pos = "center",
-  })
+    -- Create input window (user input area)
+    chat_state.input_win = vim.api.nvim_open_win(chat_state.input_buf, false, {
+      relative = "editor",
+      width = width,
+      height = input_height,
+      col = col,
+      row = row + chat_height + 1,
+      style = "minimal",
+      border = config.chat_box.border,
+      title = " Your Message (Press Enter to send, Ctrl+C to exit) ",
+      title_pos = "center",
+    })
+  else
+    -- Sidebar mode
+    local sidebar_width = math.floor(vim.o.columns * config.chat_box.width / 100)
+    local total_height = vim.o.lines - 2 -- Account for status line and command line
+    local input_height = 5 -- Fixed height for input area
+    local chat_height = total_height - input_height
+
+    -- Open sidebar split
+    if config.chat_box.position == "right" then
+      vim.cmd("rightbelow vsplit")
+    else -- left
+      vim.cmd("leftabove vsplit")
+    end
+    
+    -- Resize the split to desired width
+    vim.cmd("vertical resize " .. sidebar_width)
+    
+    -- Get the current window (sidebar)
+    local sidebar_win = vim.api.nvim_get_current_win()
+    
+    -- Set chat buffer in current window
+    vim.api.nvim_win_set_buf(sidebar_win, chat_state.buf)
+    chat_state.win = sidebar_win
+    
+    -- Create horizontal split for input area
+    vim.cmd("split")
+    vim.cmd("resize " .. input_height)
+    
+    -- Set input buffer in the split
+    local input_win = vim.api.nvim_get_current_win()
+    vim.api.nvim_win_set_buf(input_win, chat_state.input_buf)
+    chat_state.input_win = input_win
+
+    -- Set buffer names for better identification
+    vim.api.nvim_buf_set_name(chat_state.buf, "Gemini Chat")
+    vim.api.nvim_buf_set_name(chat_state.input_buf, "Gemini Input")
+  end
 
   -- Set up initial content
   vim.api.nvim_buf_set_option(chat_state.buf, "modifiable", true)
