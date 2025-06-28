@@ -119,7 +119,7 @@ end
 
 function M.info(opts)
   M.run("info")
-}
+end
 
 function M.prompt_with_system_prompt(opts)
   local selection = get_visual_selection()
