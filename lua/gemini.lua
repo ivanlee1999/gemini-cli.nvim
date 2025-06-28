@@ -35,11 +35,19 @@ function M.setup(args)
 end
 
 local function get_visual_selection()
-  local _, srow, scol = vim.fn.getpos("'<")
-  local _, erow, ecol = vim.fn.getpos("'>")
-  if srow == 0 or erow == 0 then
+  local pos_start = vim.fn.getpos("'<")
+  local pos_end = vim.fn.getpos("'>")
+
+  -- Check if marks are set (i.e., visual selection exists)
+  if pos_start[2] == 0 or pos_end[2] == 0 then
     return ""
   end
+
+  local srow = pos_start[2]
+  local scol = pos_start[3]
+  local erow = pos_end[2]
+  local ecol = pos_end[3]
+
   local lines = vim.api.nvim_buf_get_lines(0, srow - 1, erow, false)
   if #lines == 0 then
     return ""
