@@ -3,16 +3,16 @@ local M = {}
 
 local config = {
   -- Default configuration
-  command = "npx https://github.com/google-gemini/gemini-cli",
+  command = "gemini", -- Use globally installed gemini-cli
   terminal = {
-    enabled = true, -- Use floating terminal by default
+    enabled = false, -- Use floating terminal by default
     position = "bottom",
     height = 15,
     width = 120,
     border = "rounded",
   },
   chat_box = {
-    enabled = false, -- Use chat box by default
+    enabled = true, -- Use chat box by default
     position = "right", -- "right" or "left"
     width = 60,
   },
@@ -29,8 +29,8 @@ function M.setup(args)
     config.terminal.enabled = false
     print("Warning: Both chat_box and terminal are enabled. Prioritizing chat_box.")
   elseif not config.chat_box.enabled and not config.terminal.enabled then
-    config.terminal.enabled = true -- Default to terminal if neither is enabled
-    print("Warning: Neither chat_box nor terminal is enabled. Defaulting to terminal.")
+    config.chat_box.enabled = true -- Default to chat_box if neither is enabled
+    print("Warning: Neither chat_box nor terminal is enabled. Defaulting to chat_box.")
   end
 end
 
@@ -114,14 +114,14 @@ end
 
 function M.prompt(opts)
   local selection = get_visual_selection()
-  local input = table.concat(opts.args, " ")
+  local input = type(opts.args) == "table" and table.concat(opts.args, " ") or ""
   local prompt = get_prompt_for_filetype()
   M.run("prompt " .. prompt .. " " .. input .. " " .. selection)
 end
 
 function M.shell(opts)
   local selection = get_visual_selection()
-  local input = table.concat(opts.args, " ")
+  local input = type(opts.args) == "table" and table.concat(opts.args, " ") or ""
   M.run("shell " .. input .. " " .. selection)
 end
 
@@ -131,8 +131,8 @@ end
 
 function M.prompt_with_system_prompt(opts)
   local selection = get_visual_selection()
-  local input = table.concat(opts.args, " ")
-  M.run("prompt -p \"" .. input .. "\" " .. selection)
+  local system_prompt = type(opts.args) == "table" and table.concat(opts.args, " ") or ""
+  M.run("prompt -p \"" .. system_prompt .. "\" " .. selection)
 end
 
 function M.toggle_verbose(opts)

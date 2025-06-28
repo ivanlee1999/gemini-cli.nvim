@@ -35,16 +35,16 @@ Using your favorite plugin manager:
 
 ```lua
 require("gemini").setup({
-  command = "npx https://github.com/google-gemini/gemini-cli", -- Path to the gemini-cli executable
+  command = "gemini", -- Path to the gemini-cli executable (e.g., "gemini" if installed globally)
   terminal = {
-    enabled = true, -- Set to false to disable the floating terminal
+    enabled = false, -- Set to true to enable the floating terminal
     position = "bottom",
     height = 15,
     width = 120,
     border = "rounded",
   },
   chat_box = {
-    enabled = false, -- Set to true to enable the chat box
+    enabled = true, -- Set to false to disable the chat box
     position = "right", -- "right" or "left"
     width = 60,
   },
