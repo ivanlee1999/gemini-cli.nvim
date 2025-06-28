@@ -16,7 +16,7 @@ Using your favorite plugin manager:
 
 ```lua
 {
-  "your-username/gemini.nvim",
+  "ivanlee1999/gemini-cli.nvim",
   config = function()
     require("gemini").setup()
   end,
