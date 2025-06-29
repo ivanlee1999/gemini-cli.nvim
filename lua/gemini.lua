@@ -13,7 +13,7 @@ local M = {}
 --- @param args? table Legacy configuration
 function M.setup(args)
   args = args or {}
-  
+
   -- Map legacy configuration to new structure
   local new_config = {
     command = args.command or "gemini",
@@ -57,13 +57,13 @@ function M.setup(args)
       scrolling = true,
     }
   }
-  
+
   -- Handle legacy terminal/chat_box configuration
   if args.terminal and args.terminal.enabled then
     new_config.window.position = args.terminal.position or "botright"
     new_config.window.split_ratio = (args.terminal.height or 15) / vim.o.lines
   end
-  
+
   if args.chat_box and args.chat_box.enabled then
     if args.chat_box.position == "right" then
       new_config.window.position = "botright vsplit"
@@ -72,16 +72,16 @@ function M.setup(args)
     end
     new_config.window.split_ratio = (args.chat_box.width or 30) / 100
   end
-  
+
   -- Handle legacy prompts (convert to command variants)
   if args.prompts then
     -- Legacy prompts are not directly supported in the new terminal-based approach
     -- They would need to be handled by the gemini CLI itself
   end
-  
+
   -- Forward to new implementation
   gemini_code.setup(new_config)
-  
+
   -- Store reference for legacy function calls
   M._gemini_code = gemini_code
 end

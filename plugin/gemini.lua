@@ -18,9 +18,8 @@ if vim.fn.has('nvim-0.7') == 0 then
 end
 
 -- Initialize the plugin with default configuration
--- Users can override this by calling require('gemini').setup() or require('gemini-code').setup()
-local gemini = require("gemini")
-gemini.setup()
+-- Users can override this by calling require('gemini-code').setup()
+require('gemini-code').setup()
 
 
 

@@ -38,26 +38,6 @@ M.default_config = {
   },
   -- Command settings
   command = "gemini",        -- Command used to launch Gemini
-  -- Command variants
-  command_variants = {
-    -- Common variants
-    continue = "--continue", -- Continue previous conversation
-    verbose = "--verbose",   -- Enable verbose output
-    help = "--help",         -- Show help
-  },
-  -- Keymaps
-  keymaps = {
-    toggle = {
-      normal = "<C-,>",       -- Normal mode keymap for toggling Gemini
-      terminal = "<C-,>",     -- Terminal mode keymap for toggling Gemini
-      variants = {
-        continue = "<leader>gC", -- Normal mode keymap for Gemini with continue flag
-        verbose = "<leader>gV",  -- Normal mode keymap for Gemini with verbose flag
-      },
-    },
-    window_navigation = true, -- Enable window navigation keymaps
-    scrolling = true,         -- Enable scrolling keymaps for page up/down
-  }
 }
 
 --- Validate configuration

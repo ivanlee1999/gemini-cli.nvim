@@ -1,16 +1,7 @@
 
-# gemini-nvim
+# gemini.nvim
 
-A modern Neovim plugin for interacting with Google's Gemini CLI in a terminal-based interface.
-
-## Features
-
-- **Split Terminal Interface**: Opens Gemini in a dedicated terminal split on the right side by default
-- **Multiple Commands**: Various command variants (continue, verbose, help) with dedicated keymaps
-- **Git Integration**: Automatically uses git root as working directory
-- **File Change Detection**: Automatically refreshes files when they change during Gemini sessions
-- **Flexible Configuration**: Highly configurable window positioning, keymaps, and behavior
-- **Modern Architecture**: Clean, modular codebase with proper documentation
+A Neovim plugin for interacting with Google's Gemini CLI.
 
 ## Installation
 
@@ -45,28 +36,8 @@ lua require("gemini-code").setup()
 
 ## Usage
 
-### Main Commands
-- `:GeminiCode` or `:Gemini`: Toggle the Gemini terminal window
-- `:GeminiCodeVersion`: Show plugin version
-
-### Command Variants
-- `:GeminiCodeContinue` or `:GeminiContinue`: Toggle Gemini with continue flag
-- `:GeminiCodeVerbose` or `:GeminiVerbose`: Toggle Gemini with verbose flag
-- `:GeminiCodeHelp` or `:GeminiHelp`: Toggle Gemini with help flag
-
-### Default Keymaps
-- `<C-,>`: Toggle Gemini terminal (both normal and terminal mode)
-- `<leader>gC`: Toggle Gemini with continue flag
-- `<leader>gV`: Toggle Gemini with verbose flag
-
-### Window Navigation
-When `window_navigation` is enabled (default):
-- `<C-h>`, `<C-j>`, `<C-k>`, `<C-l>`: Navigate between windows
-- `<C-w>h`, `<C-w>j`, `<C-w>k`, `<C-w>l`: Standard window navigation
-
-### Scrolling
-When `scrolling` is enabled (default):
-- `<PageUp>`, `<PageDown>`: Scroll in terminal mode
+- `:Gemini`: Toggle the Gemini terminal window.
+- `:GeminiContinue`: Continue the conversation in the Gemini terminal.
 
 ## Configuration
 
@@ -106,25 +77,5 @@ require("gemini-code").setup({
     popd_cmd = 'popd',                    -- Command to pop directory from stack
   },
   
-  -- Command variants
-  command_variants = {
-    continue = "--continue",              -- Continue previous conversation
-    verbose = "--verbose",                -- Enable verbose output
-    help = "--help",                      -- Show help
-  },
-  
-  -- Keymaps
-  keymaps = {
-    toggle = {
-      normal = "<C-,>",                   -- Normal mode keymap for toggling Gemini
-      terminal = "<C-,>",                 -- Terminal mode keymap for toggling Gemini
-      variants = {
-        continue = "<leader>gC",          -- Normal mode keymap for Gemini with continue flag
-        verbose = "<leader>gV",           -- Normal mode keymap for Gemini with verbose flag
-      },
-    },
-    window_navigation = true,             -- Enable window navigation keymaps
-    scrolling = true,                     -- Enable scrolling keymaps for page up/down
-  }
 })
 ```
